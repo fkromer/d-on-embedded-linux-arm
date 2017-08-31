@@ -1,3 +1,4 @@
 # Summary
 
-* [First Chapter](chapter1.md)
+* [A board level "hello world"](chapter1.md)
+* [Hardware Interfacing](chapter2.md)
