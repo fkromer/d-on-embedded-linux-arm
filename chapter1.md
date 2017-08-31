@@ -2,53 +2,86 @@
 
 This section describes how quick start with D on the BBB.
 
-## Get an Ubuntu image onto the SD card
+## Get an official BBB Debian image onto the Micro SD card
 
-get a prebuilt Ubuntu image
+get latest official BBB debian image with GUI (LXQT) or without GUI (IoT), here with
 
-```
-wget https://rcn-ee.com/rootfs/2017-07-14/elinux/ubuntu-16.04.2-console-armhf-2017-07-14.tar.xz
+    wget https://debian.beagleboard.org/images/bone-debian-9.1-lxqt-armhf-2017-08-24-4gb.img.xz
 
-```
+verify sha256sum
 
-verify the image:
+    sha256sum bone-debian-9.1-lxqt-armhf-2017-08-24-4gb.img.xz
 
-```
-sha256sum ubuntu-16.04.2-console-armhf-2017-07-14.tar.xz
+install tool to unpack .img.xz to .img
 
-```
+    sudo apt-get install xz-utils
 
-unpack the image and `cd`:
+plug the sd card (sd card adapter with the micro sd card) into the sd card slot and find the device
 
-```
-tar xf ubuntu-16.04.2-console-armhf-2017-07-14.tar.xz
-cd ubuntu-16.04.2-console-armhf-2017-07-14
+    ls /dev/mmc*
 
-```
+... should display something like
 
-put your microsd card into a sd card adapter, put the sdcard adapter into the laptops sdcard plug
+    /dev/mmcblk0  /dev/mmcblk0p1
 
-get the device name \(`/dev/mmcblk0`\) of the sdcard
+change to root
 
-```
-sudo ./setup_sdcard.sh --probe-mmc
+    sudo su
 
-```
+copy the image onto the micro sd card
 
-install the image onto the sdcard \(for other boards replace `beaglebone` with: BeagleBoard Ax/Bx/Cx/Dx `omap3-beagle`, BeagleBoard xM `omap3-beagle-xm`, OMAP5432 uEVM `omap5-uevm`, BeagleBoard-X15 `am57xx-beagle-x15`\):
+    xz -cd bone-debian-9.1-lxqt-armhf-2017-08-24-4gb.img.xz > /dev/mmcblk0
 
-```
-sudo ./setup_sdcard.sh --mmc /dev/mmcblk0 --dtb beaglebone
+install tool to reload partition table
 
-```
+    sudo apt-get install parted
 
-[BeagleBoard Ubuntu on eLinux](http://elinux.org/BeagleBoardUbuntu)
+reload the partition table on the micro sd card
 
-## BBB setup
+    partprobe /dev/mmcblk0
+
+verify that a partition exists on the micro sd card
+
+    ls -al /dev/mmcblk0*
+
+... should show something like
+
+    brw-rw---- 1 root disk 179, 0 Aug 31 18:07 /dev/mmcblk0
+    brw-rw---- 1 root disk 179, 1 Aug 31 18:02 /dev/mmcblk0p1
+
+create mount directory for the BBB image
+
+    mkdir /media/bbb
+
+mount the image and verify the content
+
+    mount /dev/mmcblk0p1 /media/bbb
+    ll
+
+... should show something like
+
+    drwxr-xr-x 21 root root  4096 Aug 24 21:20 ./
+    drwxr-xr-x  4 root root  4096 Aug 31 18:14 ../
+    -rw-r--r--  1 root root  1359 Aug 24 21:42 bbb-uEnv.txt
+    drwxr-xr-x  2 root root  4096 Aug 24 21:00 bin/
+    drwxr-xr-x  4 root root  4096 Aug 24 21:42 boot/
+    (etc.)
+
+unmount the micro sd card
+
+    umount -l /dev/mmcblk0p1
+
+[BeagleBoard website - latest images](http://beagleboard.org/latest-images)
+
+[armhf.com - Getting Started with an Ubuntu or Debian .img.xz File](http://www.armhf.com/getting-started-with-ubuntu-img-file/)
+
+## Hardware setup
 
 connect BBB connector "USB" via microUSB-to-USB cable to a powered USB plug
 
-connect a keyboard to BBB connector "USB HOST"
+connect a keyboard and a mouse to an USB port
+
+connect the USB port to the BBB connector "USB HOST"
 
 connect connector "HDMI" via microHDMI-to-HDMI cable to a screen
 
@@ -56,58 +89,25 @@ put the microSD card into BBB connector "microSD Card"
 
 poweron
 
-## Login into Ubuntu
+(no login required, default `username@hostname`: `debian@beaglebone` with password `temppwd`)
 
-poweron \(startup jobs take quite a while until login screen pops up\)
-
-```
-arm login: ubuntu
-Password: temppwd
-
-```
-
-ready for D on BBB:
-
-```
-ubuntu@arm:~$
-
-```
+[BeagleBone website - Getting started](http://beagleboard.org/getting-started)
 
 ## Basic configuration
 
-\(optional\) adjust keyboard layout \([english keyboard layout](https://en.wikipedia.org/wiki/British_and_American_keyboards#/media/File:KB_US-International.svg), german keyboard: `z` gets `y`\):
+verify the network connection (eethernet cable connected to router)
 
-```
-sudo loadkeys de
+    ping google.com
 
-```
+open "QTerminal"
 
-create a swap file \(required that `apt-get` and other stuff works correctly despite of BBB's little RAM\)
+update package listings
 
-```
-sudo mkdir -p /var/cache/swap/   
-sudo dd if=/dev/zero of=/var/cache/swap/swapfile bs=1M count=1024
-sudo chmod 0600 /var/cache/swap/swapfile 
-sudo mkswap /var/cache/swap/swapfile
-sudo swapon /var/cache/swap/swapfile 
+    sudo apt-get update
 
-```
+change keyboard layout (requires reboot)
 
-use swap on every boot by adding `/var/cache/swap/swapfile none swap sw 0 0` to `/etc/fstab`:
-
-```
-sudo nano /etc/fstab
-
-```
-
-if the BBB is connected to a network with dhcp server running it should get an ip. in some cases it does not get an ip. execute `sudo ifdown eth0; sudo ifup eth0` as workaround. websites should be pingable with `ping google.com`.
-
-update apt-get:
-
-```
-sudo apt-get update
-
-```
+    sudo dpkg-reconfigure keyboard-configuration
 
 ## Install D tools
 
