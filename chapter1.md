@@ -109,13 +109,13 @@ change keyboard layout (requires `sudo reboot`)
 
     sudo dpkg-reconfigure keyboard-configuration
 
-## Install Cape Manager
+## Setup Cape Manager
 
 figure out latest kernel
 
     apt-cache search linux-image
 
-install the latest kernel (requires `sudo reboot`)
+install a kernel which includes the cape manager e.g. (requires `sudo reboot`)
 
     sudo apt-get install linux-image-4.9.46-bone7
 
@@ -126,6 +126,11 @@ verify the cape manager directory
 ... should list something like
 
     baseboard  driver  driver_override  modalias  of_node  power  slots  subsystem  uevent
+
+define environament variables for slots and pins, `sudo nano ~./profile` and insert
+
+    export SLOTS=/sys/devices/platform/bone_capemgr
+    export PINS=/sys/kernel/debug/pinctrl/44e10800.pinmux/pins
 
 (device tree overlays are available from the [Robert C. Nelson's overlay repo](https://github.com/RobertCNelson/bb.org-overlays))
 
