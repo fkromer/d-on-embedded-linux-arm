@@ -105,9 +105,33 @@ update package listings
 
     sudo apt-get update
 
-change keyboard layout (requires reboot)
+change keyboard layout (requires `sudo reboot`)
 
     sudo dpkg-reconfigure keyboard-configuration
+
+## Install Cape Manager
+
+figure out latest kernel
+
+    apt-cache search linux-image
+
+install the latest kernel (requires `sudo reboot`)
+
+    sudo apt-get install linux-image-4.9.46-bone7
+
+verify the cape manager directory
+
+    ls /sys/devices/platform/bone_capemgr/
+
+... should list something like
+
+    baseboard  driver  driver_override  modalias  of_node  power  slots  subsystem  uevent
+
+(device tree overlays are available from the [Robert C. Nelson's overlay repo](https://github.com/RobertCNelson/bb.org-overlays))
+
+[thin-printer.com - Cape Manager is back baby!](https://www.thing-printer.com/cape-manager-is-back-baby/)
+
+(Exploring BeagleBone, p. 222)
 
 ## Install D tools
 
