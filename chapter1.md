@@ -194,6 +194,12 @@ Hello D on BBB
 
 ```
 
+install the package manager into the host (e.g. Ubuntu):
+
+    sudo apt-get install dub
+
+
+
 ## Debugging with a serial-to-USB cable
 
 If something goes wrong consider to connect a serial-to-USB cable to the BBB \(cable "GND" to BBB connector "J1" pin 1, cable "TX" to BBB connector "J1" pin 4, cable "RX" to BBB connector "J1" pin 5\).
@@ -201,4 +207,3 @@ If something goes wrong consider to connect a serial-to-USB cable to the BBB \(c
 install minicom or an equivalent `sudo apt-get install minicom`
 
 start the serial console `sudo minicom -b 115200 -D /dev/ttyUSB0`
-
