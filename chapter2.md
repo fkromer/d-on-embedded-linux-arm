@@ -57,7 +57,9 @@ To interface the LEDs of the BBB via the character device drivers with a D scrip
 The analog-to-digital converter provides analog inputs to the `sysfs` which can be
 read with D applications via the command line.
 
-apply the device tree overlay "BB‐ADC"
+apply the device tree overlay "BB‐ADC":
+
+    sudo sh -c "echo 'BB-ADC' > $SLOTS"
 
 read analog input 0:
 
