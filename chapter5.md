@@ -35,6 +35,14 @@
 > coding style. This could be enforced using code reviews, but the simpler and
 > less offensive way to achieve this is by using a tool as style cop. (...)
 
+[xkcd (code quality)](https://imgs.xkcd.com/comics/code_quality.png)
+
+[xkcd (cod quality 2)](https://imgs.xkcd.com/comics/code_quality_2.png)
+
+[xkcd (cod quality 3)](https://imgs.xkcd.com/comics/code_quality_3.png)
+
+[xkcd (bug)](https://imgs.xkcd.com/comics/bug.png)
+
 ### [Writing Testable D (DConf Talk)](http://dconf.org/2013/talks/gertzfield.html)
 
 > Abstract: (...) The solution is to keep coders, not QA, responsible for
