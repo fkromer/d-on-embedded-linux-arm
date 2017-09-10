@@ -119,6 +119,11 @@ install a kernel which includes the cape manager e.g. (requires `sudo reboot`)
 
     sudo apt-get install linux-image-4.9.46-bone7
 
+check if the cape manager option of the kernel is existing and enabled (should
+output something like `CONFIG_BONE_CAPEMGR=y`):
+
+    zcat /proc/config.gz | grep CONFIG_BONE_CAPEMGR
+
 verify the cape manager directory
 
     ls /sys/devices/platform/bone_capemgr/
@@ -127,12 +132,72 @@ verify the cape manager directory
 
     baseboard  driver  driver_override  modalias  of_node  power  slots  subsystem  uevent
 
-define environament variables for slots and pins, `sudo nano ~./profile` and insert
+define environment variables for slots and pins, `sudo nano ~./profile` and insert
 
-    export SLOTS=/sys/devices/platform/bone_capemgr
+    # BeagleBone Cape Manager Slots and Pins
+    export SLOTS=/sys/devices/platform/bone_capemgr/slots
     export PINS=/sys/kernel/debug/pinctrl/44e10800.pinmux/pins
 
-(device tree overlays are available from the [Robert C. Nelson's overlay repo](https://github.com/RobertCNelson/bb.org-overlays))
+source and check `printenv PINS` and `printenv SLOTS`:
+
+    source ~/.profile
+
+check if the cape manager works:
+
+    cat $SLOTS
+
+...should output something like:
+
+    0: PF----  -1
+    1: PF----  -1
+    2: PF----  -1
+    3: PF----  -1
+
+... and
+
+    sudo cat $PINS
+
+...should output something like:
+
+    registered pins: 142
+    pin 0 (44e10800.0) 00000031 pinctrl-single
+    pin 1 (44e10804.0) 00000031 pinctrl-single
+    ...
+
+check if the device tree overlays ([Robert C. Nelson's overlay repo](https://github.com/RobertCNelson/bb.org-overlays)) are already installed
+(they are usually preinstalled):
+
+    apt-cache policy bb-cape-overlays
+
+...otherwise install it:
+
+    sudo apt update ; sudo apt install bb-cape-overlays
+
+get a list of available device tree overlays:
+
+    cd /lib/firmware
+    ls BB-*
+
+load a device tree overlay e.g. "BB-UART1" (`BB-UART1-00A0.dtbo`) pre-built into
+the cape manager:
+
+    sudo sh -c "echo 'BB-UART1' > $SLOTS"
+
+check if the overlay has been applied:
+
+    cat $SLOTS
+
+...should show something like:
+
+    0: PF----  -1
+    1: PF----  -1
+    2: PF----  -1
+    3: PF----  -1
+    4: P-O-L-   0 Override Board Name,00A0,Override Manuf,BB-UART1
+
+remove a device tree overlay from the cape manager:
+
+    sudo sh -c "echo '-4' > $SLOTS"
 
 [thin-printer.com - Cape Manager is back baby!](https://www.thing-printer.com/cape-manager-is-back-baby/)
 
