@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "Building the D example script whologgedin"
+gdc whologgedin.d -o whologgedin

@@ -47,8 +47,11 @@ restore heartbeat flashing of led "USER LEDS D2 0":
 
 ### Script
 
-To interface the LEDs of the BBB via the character device drivers with a D script refer to the
-[LED scripts in the "Exploring BeagleBone" companion repository](https://github.com/derekmolloy/exploringBB/tree/master/chp05/dLED).
+For an example how to interface the LEDs of the BBB via the character device
+drivers with a D script refer to the source code
+[`led.d`](https://github.com/fkromer/d-on-embedded-linux-arm/tree/master/code/led/led.d).
+
+You can build the script `led` with the build script `build` in the same directory.
 
 ## Analog Inputs
 

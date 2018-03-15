@@ -1,11 +1,15 @@
 # Interfacing with the OS
 
-## Script
+## /proc
 
-For an example how to interact with `/proc` via a D script refer to this
-[script to read the system uptime](https://github.com/fkromer/exploringBB/blob/proc/chp05/proc/d/readUptime.d).
+For an example how to interact with `/proc` via a D script refer to the source code
+[`readUptime.d`](https://github.com/fkromer/d-on-embedded-linux-arm/tree/master/code/proc/readUptime.d).
+
+You can build the script `readUptime` with the build script `build` in the same directory.
 
 ## POSIX
 
-For an example how to interact with the OS over `core.sys.posix` refer to the
-this [script to get the currently loggedin user](https://github.com/fkromer/exploringBB/blob/proc/chp05/proc/d/whologgedin.d).
+For an example how to interact with the OS via `core.sys.posix` refer to the source code
+[`whologgedin.d`](https://github.com/fkromer/d-on-embedded-linux-arm/tree/master/code/posix/whologgedin.d).
+
+You can build the script `whologgedin` with the build script `build` in the same directory.

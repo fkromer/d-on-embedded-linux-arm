@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "Building the D example script readuptime"
+gdc readUptime.d -o readUptime
